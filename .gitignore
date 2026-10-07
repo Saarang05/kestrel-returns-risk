@@ -1,0 +1,6 @@
+# Customer / operational data must not be published (Kestrel ops policy s10). Keep the repo private or leave these out.
+data/
+evidence/oot_predictions.csv
+__pycache__/
+.venv/
+*.pyc

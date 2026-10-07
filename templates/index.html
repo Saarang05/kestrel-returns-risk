@@ -1,0 +1,47 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kestrel Returns Risk</title>
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--ink:#1b2430;--mut:#667085;--line:#e3e7ee;--hi:#b42318;--med:#b54708;--lo:#067647;--acc:#1f4fd8}
+@media (prefers-color-scheme:dark){:root{--bg:#10141a;--card:#181e27;--ink:#e8edf4;--mut:#93a0b4;--line:#2a3441;--hi:#ff8a80;--med:#ffb86b;--lo:#6ee7a8;--acc:#7aa2ff}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,Segoe UI,Roboto,sans-serif}
+main{max-width:980px;margin:0 auto;padding:20px 16px 40px}h1{font-size:20px;margin:0 0 4px}p.sub{color:var(--mut);margin:0 0 16px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}@media(max-width:760px){.grid{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px}
+label{display:block;font-size:12px;color:var(--mut);margin:10px 0 3px}input,select{width:100%;padding:8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font:inherit}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}button{margin-top:14px;padding:10px 14px;border:0;border-radius:8px;background:var(--acc);color:#fff;font:inherit;font-weight:600;cursor:pointer}
+button.ghost{background:transparent;color:var(--acc);border:1px solid var(--line);margin-right:6px}
+.big{font-size:34px;font-weight:700}.pill{display:inline-block;padding:2px 10px;border-radius:99px;font-size:12px;font-weight:600;border:1px solid currentColor}
+.high{color:var(--hi)}.medium{color:var(--med)}.low{color:var(--lo)}ul{padding-left:18px;margin:8px 0}li{margin:6px 0}.mut{color:var(--mut);font-size:13px}.warn{color:var(--med);font-size:13px}
+</style></head><body><main>
+<h1>Kestrel returns risk</h1><p class="sub">Enter an order as it looks at dispatch. The screen calls <code>POST /score</code>. No paid API is used.</p>
+<div class="grid">
+<div class="card"><div>
+<button class="ghost" onclick="preset(0)">High-risk example</button><button class="ghost" onclick="preset(1)">Low-risk example</button><button class="ghost" onclick="preset(2)">Shield example</button></div>
+<form id="f" onsubmit="go(event)">
+<div class="row"><div><label>SKU</label><select id="sku"></select></div><div><label>Sales channel</label><select id="sales_channel"><option>app</option><option>web</option><option>marketplace</option><option>partner_outlet</option></select></div></div>
+<div class="row"><div><label>Payment mode</label><select id="payment_mode"><option>prepaid_upi</option><option>prepaid_card</option><option>cod</option><option>emi</option></select></div><div><label>Shield member</label><select id="shield_member"><option>N</option><option>Y</option></select></div></div>
+<div class="row"><div><label>Discount %</label><input id="discount_pct" type="number" step="1" value="10"></div><div><label>Qty</label><input id="qty" type="number" value="1"></div></div>
+<div class="row"><div><label>Order value (Rs)</label><input id="order_value_inr" type="number" step="0.01" value="4679.1"></div><div><label>Promised delivery (days)</label><input id="promised_delivery_days" type="number" value="5"></div></div>
+<div class="row"><div><label>Customer prior orders</label><input id="customer_prior_orders" type="number" value="1"></div><div><label>Customer prior returns</label><input id="customer_prior_returns" type="number" value="0"></div></div>
+<div class="row"><div><label>Gift</label><select id="is_gift"><option>N</option><option>Y</option></select></div><div><label>Pincode (000000 = no address)</label><input id="delivery_pincode" value="440365"></div></div>
+<button type="submit">Score this order</button></form></div>
+<div class="card" id="out"><div class="mut">Result appears here.</div></div></div>
+<script>
+const SKUS=["KH-AF-01","KH-AF-02","KH-AF-03","KH-MG-01","KH-MG-02","KH-MG-03","KH-WP-01","KH-WP-02","KH-WP-03","KH-RV-01","KH-RV-02","KH-RV-03","KH-IC-01","KH-IC-02","KH-IC-03","KH-CF-01","KH-CF-02","KH-CF-03","KH-RH-01","KH-RH-02","KH-RH-03"];
+const $=id=>document.getElementById(id);$("sku").innerHTML=SKUS.map(s=>`<option>${s}</option>`).join("");
+const P=[{sku:"KH-RV-02",sales_channel:"marketplace",payment_mode:"cod",shield_member:"N",discount_pct:25,qty:1,order_value_inr:16499.25,promised_delivery_days:8,customer_prior_orders:3,customer_prior_returns:2,is_gift:"N",delivery_pincode:"440254"},
+{sku:"KH-MG-01",sales_channel:"partner_outlet",payment_mode:"prepaid_upi",shield_member:"N",discount_pct:5,qty:1,order_value_inr:3039.05,promised_delivery_days:3,customer_prior_orders:1,customer_prior_returns:0,is_gift:"N",delivery_pincode:"000000"},
+{sku:"KH-WP-02",sales_channel:"app",payment_mode:"cod",shield_member:"Y",discount_pct:15,qty:1,order_value_inr:12749.15,promised_delivery_days:6,customer_prior_orders:4,customer_prior_returns:1,is_gift:"N",delivery_pincode:"560001"}];
+function preset(i){for(const k in P[i])$(k).value=P[i][k];go()}
+const esc=s=>String(s).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+async function go(e){if(e)e.preventDefault();
+ const rec={};["sku","sales_channel","payment_mode","shield_member","discount_pct","qty","order_value_inr","promised_delivery_days","customer_prior_orders","customer_prior_returns","is_gift","delivery_pincode"].forEach(k=>rec[k]=$(k).value);
+ let r;try{r=await fetch("/score",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(rec)});}catch(err){$("out").innerHTML="<div class='warn'>Cannot reach the scoring service. Is it running?</div>";return}
+ const j=await r.json();if(!r.ok){$("out").innerHTML=`<div class="warn"><b>${esc(j.error)}</b><br>${esc(JSON.stringify(j.missing||j.detail||""))}</div>`;return}
+ $("out").innerHTML=`<div class="mut">Chance this order is returned</div><div class="big ${j.risk_band}">${(j.return_probability*100).toFixed(0)}%</div>
+ <span class="pill ${j.risk_band}">${j.risk_band.toUpperCase()} · ${j.action.replace(/_/g," ")}</span>
+ <p>${esc(j.advice)}</p><p class="mut">Expected return cost on this order: Rs ${j.expected_return_cost_rs} (policy cost of a return Rs 1,150). Call threshold: ${(j.call_threshold*100).toFixed(0)}%.</p>
+ <b>Why</b><ul>${j.reasons.map(x=>`<li>${esc(x.reason)} <span class="mut">(${x.direction})</span></li>`).join("")}</ul>
+ ${j.warnings.map(w=>`<div class="warn">⚠ ${esc(w)}</div>`).join("")}<p class="mut">${esc(j.model_note)}</p>`}
+preset(0);
+</script></main></body></html>

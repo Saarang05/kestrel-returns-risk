@@ -1,0 +1,56 @@
+{
+  "rows_raw": 11155,
+  "rows_dedup": 10504,
+  "dupes_removed": 651,
+  "value_x100_rows_fixed": 700,
+  "base_rate": 0.11424219345011424,
+  "folds": [
+    {
+      "train_end": "2025-10-01",
+      "val_end": "2026-01-01",
+      "n_val": 2082,
+      "base": 0.10806916426512968,
+      "auc": 0.7687129779213785,
+      "pr_auc": 0.3463665855120679,
+      "acc_at_0.5": 0.8948126801152738,
+      "always_no_acc": 0.8919308357348703
+    },
+    {
+      "train_end": "2026-01-01",
+      "val_end": "2026-04-01",
+      "n_val": 2126,
+      "base": 0.11618062088428975,
+      "auc": 0.7750138436113618,
+      "pr_auc": 0.3947943600632721,
+      "acc_at_0.5": 0.8936970837253058,
+      "always_no_acc": 0.8838193791157103
+    },
+    {
+      "train_end": "2026-04-01",
+      "val_end": "2026-07-01",
+      "n_val": 2126,
+      "base": 0.11523988711194733,
+      "auc": 0.7886143931256713,
+      "pr_auc": 0.4173743395376599,
+      "acc_at_0.5": 0.8955785512699906,
+      "always_no_acc": 0.8847601128880527
+    }
+  ],
+  "oot_n": 6334,
+  "oot_base": 0.11319861067256079,
+  "oot_auc": 0.777522484170265,
+  "oot_pr_auc": 0.38418036128073785,
+  "oot_brier": 0.08519434577878553,
+  "oot_acc_at_0.5": 0.8946952952320808,
+  "oot_always_no_acc": 0.8868013893274392,
+  "threshold_top15pct_score": 0.1991672640740484,
+  "leaky_demo": {
+    "auc": 0.9970673436838849,
+    "acc": 0.9905926622765757,
+    "note": "pickup/service columns are written after a return is approved; absent in test file. NOT used."
+  },
+  "test_rows": 2096,
+  "test_mean_score": 0.1186412120182564,
+  "test_pct_scored_over_thr": 0.16173664122137404,
+  "test_shield_share_over_thr": 0.4749262536873156
+}
