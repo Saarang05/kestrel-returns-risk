@@ -34,9 +34,7 @@ python -m unittest discover tests
 | `src/train.py` | out-of-time validation, rupee analysis, final fit, predictions |
 | `src/service.py`, `templates/index.html` | endpoint and screen |
 | `EVIDENCE.md`, `evidence/` | how we know it works and how often it does not |
-| `MEMO.md` / `MEMO.docx` | one-page memo to Ritu |
-| `submission-form.md` | answers to the form |
-| `RECORDING_SCRIPT.md` | 3-minute walkthrough script |
+| `MEMO.md` | one-page memo to Ritu |
 
 ## Data handling
 Kestrel policy s10: data must not be published or shared beyond the engagement team. `data/` and per-order validation outputs are git-ignored. **Keep this repo private** (or share only with Banao); `predictions.csv` lists real order ids.
