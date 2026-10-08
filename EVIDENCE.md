@@ -36,7 +36,7 @@ Net = share returned x 35% prevented (spring pilot) x return cost, minus Rs 45 p
 Holding: only 12% of held orders cancel; at an *assumed* Rs 1,000 margin per lost good order, holding loses money from the top 10% upward (`hold_net_per_flag_rs_margin1000`). About 45% of flagged orders are Shield members.
 
 ## Where it gets it wrong (`evidence/segment_errors.csv`, top-15% flag)
-- **Misses 62% of returns overall.** Returns with no warning sign (prepaid, first-time customer, cheap fan or mixer) look like normal orders. About 70% of returns on prepaid UPI and on mixers/cooktops are missed.
+- **Misses 54% of returns overall (62% of returns by non-Shield customers).** Returns with no warning sign (prepaid, first-time customer, cheap fan or mixer) look like normal orders. About 70% of returns on prepaid UPI and on mixers/cooktops are missed.
 - **2 in 3 flagged orders are fine.** Precision is about 35%, so any hold or call lands on many good customers.
 - **Shield members:** 30% are flagged (vs 11% of others) because they return 2x as often. Precision is similar (37%), but they are the customers Meenal wants protected.
 - **Cold start:** customers with no order history (29% of orders) are ranked less well: AUC 0.75 vs 0.78 for repeat customers.
